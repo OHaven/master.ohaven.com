@@ -10,23 +10,21 @@
                     </a>
                 </div>
 
-                @if (strcmp(Auth::user()->type, "hotel"))
+                @if (strcmp(Auth::user()->type, "admin")==true && strcmp(Auth::user()->type, "user")==false && strcmp(Auth::user()->type, "hotel")==true)
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Great Offers') }}
+                        {{ __('Home') }}
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('fhotel') }}">
                         {{ __('Find Hotels') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Promos') }}
-                    </x-jet-nav-link>
+
                 </div>
             </div>
             @endif
 
-            @if (strcmp(Auth::user()->type, "user"))
+            @if (strcmp(Auth::user()->type, "admin")==true && strcmp(Auth::user()->type, "user")==true && strcmp(Auth::user()->type, "hotel")==false)
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 <x-jet-nav-link href="{{ route('htledash') }}" :active="request()->routeIs('htledash')">
@@ -41,8 +39,27 @@
                 <x-jet-nav-link href="manpromo">
                     {{ __('Manage Promos') }}
                 </x-jet-nav-link>
-                <x-jet-nav-link href="{{ route('dashboard') }}">
+                <x-jet-nav-link href="{{ route('payopt') }}">
                     {{ __('Payment System') }}
+                </x-jet-nav-link>
+            </div>
+        </div>
+        @endif
+
+        @if (strcmp(Auth::user()->type, "admin")==false && strcmp(Auth::user()->type, "user")==true && strcmp(Auth::user()->type, "hotel")==true)
+            <!-- Navigation Links -->
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <x-jet-nav-link href="{{ route('admindash') }}" :active="request()->routeIs('htledash')">
+                    {{ __('Accounts Management') }}
+                </x-jet-nav-link>
+                <x-jet-nav-link href="{{ route('adres') }}">
+                    {{ __('Reservations') }}
+                </x-jet-nav-link>
+                <x-jet-nav-link href="{{ route('sett') }}">
+                    {{ __('Settle') }}
+                </x-jet-nav-link>
+                <x-jet-nav-link href="{{ route('hpay') }}">
+                    {{ __('Payment') }}
                 </x-jet-nav-link>
             </div>
         </div>

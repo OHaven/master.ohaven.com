@@ -34,7 +34,7 @@ class coupon extends Controller
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $code = substr(str_shuffle(str_repeat($pool, 5)), 0, 5)."50";
 
-            $s = Promo::where('hotelid', '=', $hid)->get();
+            $s = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->get();
         $prcnt = count($s);
 
 
@@ -47,9 +47,9 @@ class coupon extends Controller
         }
         else {
             $const = "add";
-            $prid = Promo::where('hotelid', '=', $hid)->pluck('roomid');
-            $prcode = Promo::where('hotelid', '=', $hid)->pluck('promocode');
-            $prdis = Promo::where('hotelid', '=', $hid)->pluck('discount');
+            $prid = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->pluck('roomid');
+            $prcode = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->pluck('promocode');
+            $prdis = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->pluck('discount');
 
            return view('manpromo', compact('const', 'rnum', 'code', 'rname', 'ord', 'prcnt', 'prcode', 'prdis', 'prid'));
         }
@@ -81,23 +81,24 @@ class coupon extends Controller
     $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $code = substr(str_shuffle(str_repeat($pool, 5)), 0, 5)."50";
 
-    $prcnt = count(Promo::all());
+    $s = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->get();
+    $prcnt = count($s);
 
 
 
         Promo::create([
         'promocode' => $input->pcode,
         'hotelid' => $hid[0],
-        'roomid' => $roomn[0],
+        'roomid' => $roomn,
         'discount' => $input->po,
         'status' => 1,
         'promolimit' => $input->limits,
         ]);
 
         $const = "add";
-        $prid = Promo::where('hotelid', '=', $hid)->pluck('roomid');
-        $prcode = Promo::where('hotelid', '=', $hid)->pluck('promocode');
-        $prdis = Promo::where('hotelid', '=', $hid)->pluck('discount');
+        $prid = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->pluck('roomid');
+        $prcode = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->pluck('promocode');
+        $prdis = Promo::where('hotelid', '=', $hid)->where('status', '=', 1)->pluck('discount');
 
 
         return view('manpromo', compact('const', 'rnum', 'code', 'rname', 'ord', 'prcnt', 'prcode', 'prdis', 'prid'));

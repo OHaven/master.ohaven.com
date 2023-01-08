@@ -30,6 +30,7 @@ class RetRooms extends Controller
             return redirect()->intended('new');
         }
         else {
+            //dd(compact('ord', 'name','descs', 'price', 'cap','php', 'ids'));
         return view('htelrooms', compact('ord', 'name','descs', 'price', 'cap','php', 'ids'));
     }
     }

@@ -7,8 +7,10 @@ use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\User;
 use App\Models\Hotels;
 use App\Models\Rooms;
+use App\Models\Transactions;
 
 class GetLocation extends Controller
 {
@@ -20,11 +22,27 @@ class GetLocation extends Controller
         if ($position = Location::get($ip)) {
             $user = Auth::user();
 
-            if(strcmp($user->type, "user")){
-                return redirect()->intended('htledash');
+            if(strcmp(Auth::user()->type, "admin")==true && strcmp(Auth::user()->type, "user")==true && strcmp(Auth::user()->type, "hotel")==false){
+                $name = User::where('id', '=', Auth::user()->id)->pluck('name')->take(1);
+                $stat = Hotels::where('hotelname', '=', $name[0])->pluck('stat');
+
+                if($stat[0]== 0){
+                    return view('block', compact('name', 'stat'));
+                }
+                elseif($stat[0] == 1){
+                    return redirect()->intended('htledash');
+                }
+                else{
+                    return view('block', compact('name', 'stat'));
+                }
+
             }
 
-            if(strcmp($user->type, "hotel")){
+            if(strcmp(Auth::user()->type, "admin")==false && strcmp(Auth::user()->type, "user")==true && strcmp(Auth::user()->type, "hotel")==true){
+                return redirect()->intended('admindash');
+            }
+
+            if(strcmp(Auth::user()->type, "admin")==true && strcmp(Auth::user()->type, "user")==false && strcmp(Auth::user()->type, "hotel")==true){
                 //dd(compact('position'));
 
                 //get hotels near me
@@ -50,8 +68,24 @@ class GetLocation extends Controller
                         $pfp = Hotels::where(DB::raw('lower(loc)'), 'LIKE', '%'.strtolower($regional).'%')->orWhere(DB::raw('lower(loc)'), 'LIKE', '%'.strtolower($position->cityName).'%')->take(6)->pluck('pfp')->sortByDesc('rating');
                         $rating = Hotels::where(DB::raw('lower(loc)'), 'LIKE', '%'.strtolower($regional).'%')->orWhere(DB::raw('lower(loc)'), 'LIKE', '%'.strtolower($position->cityName).'%')->take(6)->pluck('rating')->sortByDesc('rating');
                         $ids = Hotels::where(DB::raw('lower(loc)'), 'LIKE', '%'.strtolower($regional).'%')->orWhere(DB::raw('lower(loc)'), 'LIKE', '%'.strtolower($position->cityName).'%')->take(6)->pluck('id')->sortByDesc('rating');
+
+
+                        $transcounter = Transactions::where('userid', '=', Auth::user()->id)->where('status','!=', 3)->count();
+
+
+                        if($transcounter >= 0){
+                            $transid =   Transactions::where('userid', '=', Auth::user()->id)->where('status','!=', 3)->pluck('transid')->sortBy('transid');
+                            $referid =   Transactions::where('userid', '=', Auth::user()->id)->where('status','!=', 3)->pluck('referenceId')->sortBy('transid');
+                            $status =   Transactions::where('userid', '=', Auth::user()->id)->where('status','!=', 3)->pluck('status')->sortBy('transid');
+
+                            //dd(compact('ids','near', 'hname', 'loc', 'counter', 'pfp', 'rating'));
+                           return view('dashboard', compact('transcounter', 'status' ,'referid','transid','ids','near', 'hname', 'loc', 'counter', 'pfp', 'rating'));
+                        }
+
+                        else{
+
                         return view('dashboard', compact('ids','near', 'hname', 'loc', 'counter', 'pfp', 'rating'));
-                    }
+                        }}
 
                     else {
                         // $regional = Str::substr($position->regionName, stripos($position->regionName, "of")+3);
@@ -147,25 +181,28 @@ class GetLocation extends Controller
 
 
         if($ids==0){
-            $php1 = Rooms::where('hotelid', '=', $hid)->orderBy('roomid', "asc")->pluck('roomph');
-        $price1 = Rooms::where('roomid', '=', $hid)->orderBy('roomid', "asc")->pluck('pricing');
-        $cap1 = Rooms::where('roomid', '=', $hid)->orderBy('roomid', "asc")->pluck('cap');
-        $name1 = Rooms::where('roomid', '=', $hid)->orderBy('roomid', "asc")->pluck('roomname');
-        $rnm = Rooms::where('roomid', '=', $hid)->orderBy('roomid', "asc")->pluck('room_number');
-        $desc = Rooms::where('roomid', '=', $hid)->orderBy('roomid', "asc")->pluck('desc');
-        return view('userhotelrooms', compact('idss','desc','rnm','hid', 'hname', 'pfp', 'rating', 'loc', 'ords', 'price', 'cap', 'name', 'php', 'ids' , 'price1', 'cap1', 'name1', 'php1'));
-        }
+            $count = Rooms::where('roomid', '=', $hid)->where('stat', '=', 1)->count();
+            $php1 = Rooms::where('hotelid', '=', $hid)->where('stat', '=', 1)->orderBy('roomid', "asc")->pluck('roomph');
+        $price1 = Rooms::where('roomid', '=', $hid)->where('stat', '=', 1)->orderBy('roomid', "asc")->pluck('pricing');
+        $cap1 = Rooms::where('roomid', '=', $hid)->where('stat', '=', 1)->orderBy('roomid', "asc")->pluck('cap');
+        $name1 = Rooms::where('roomid', '=', $hid)->where('stat', '=', 1)->orderBy('roomid', "asc")->pluck('roomname');
+        $rnm = Rooms::where('roomid', '=', $hid)->where('stat', '=', 1)->orderBy('roomid', "asc")->pluck('room_number');
+        $desc = Rooms::where('roomid', '=', $hid)->where('stat', '=', 1)->orderBy('roomid', "asc")->pluck('desc');
+            //return view('userhotelrooms',compact('ords', 'name1'));
+        return view('userhotelrooms', compact('count', 'idss','desc','rnm','hid', 'hname', 'pfp', 'rating', 'loc', 'ords', 'price', 'cap', 'name', 'php', 'ids' , 'price1', 'cap1', 'name1', 'php1'));
+        //    dd(compact('idss','desc','rnm','hid', 'hname', 'pfp', 'rating', 'loc', 'ords', 'price', 'cap', 'name', 'php', 'ids' , 'price1', 'cap1', 'name1', 'php1'));
+    }
 
         else{
-        $php1 = Rooms::where('roomid', '=', $ids)->orderBy('roomname', "asc")->pluck('roomph');
-        $price1 = Rooms::where('roomid', '=', $ids)->orderBy('roomname', "asc")->pluck('pricing');
-        $cap1 = Rooms::where('roomid', '=', $ids)->orderBy('roomname', "asc")->pluck('cap');
-        $name1 = Rooms::where('roomid', '=', $ids)->orderBy('roomname', "asc")->pluck('roomname');
-        $rnm = Rooms::where('roomid', '=', $ids)->orderBy('roomname', "asc")->pluck('room_number');
-        $desc = Rooms::where('roomid', '=', $ids)->orderBy('roomname', "asc")->pluck('desc');
+        $php1 = Rooms::where('roomid', '=', $ids)->where('stat', '=', 1)->orderBy('roomname', "asc")->pluck('roomph');
+        $price1 = Rooms::where('roomid', '=', $ids)->where('stat', '=', 1)->orderBy('roomname', "asc")->pluck('pricing');
+        $cap1 = Rooms::where('roomid', '=', $ids)->where('stat', '=', 1)->orderBy('roomname', "asc")->pluck('cap');
+        $name1 = Rooms::where('roomid', '=', $ids)->where('stat', '=', 1)->orderBy('roomname', "asc")->pluck('roomname');
+        $rnm = Rooms::where('roomid', '=', $ids)->where('stat', '=', 1)->orderBy('roomname', "asc")->pluck('room_number');
+        $desc = Rooms::where('roomid', '=', $ids)->where('stat', '=', 1)->orderBy('roomname', "asc")->pluck('desc');
 
-    //dd(compact('ids'));
-       return view('userhotelrooms', compact('idss','desc','rnm','hid', 'hname', 'pfp', 'rating', 'loc', 'ords', 'price', 'cap', 'name', 'php', 'ids' , 'price1', 'cap1', 'name1', 'php1'));
+
+      return view('userhotelrooms', compact('ids','idss','desc','rnm','hid', 'hname', 'pfp', 'rating', 'loc', 'ords', 'price', 'cap', 'name', 'php', 'ids' , 'price1', 'cap1', 'name1', 'php1'));
         }
     }
 

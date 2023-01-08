@@ -7,7 +7,16 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="display:inline-flex;">
             {{ __('Browse Rooms') }}
         </h2>
+        @if($ords==0)
+        <center><h4 class="font-semibold text-m text-gray-500 leading-tight" style="margin: 5em;">
+           No Rooms available for this hotel.   <a href='/fhotel'>Find hotels?</a>
+        </h4></center>
+
+
+        @else
+
         <a href="viewallrooms?hid={{$hid[0]}}" class="text-sm text-gray-800 leading-tight" style="display:inline-flex; float: right; margin-right: 3.5em;"><p>See All Rooms</p></a>
+
 
 
         @for ($i=0; $i < $ords; $i++)
@@ -25,6 +34,8 @@
 </div></a>
 @endfor
 
+@endif
+
 
 </div></div>
 @endsection
@@ -33,25 +44,23 @@
 <div class="py-12" style="display: inline-flex; width:60%;">
 
 
+    @if($ords==0)
+        <center><h4 class="font-semibold text-m text-gray-500 leading-tight" style="margin: 5em;">
+           No Rooms available for this hotel.   <a href='/fhotel'>Find hotels?</a>
+        </h4></center>
 
+
+    @elseif ($count==0)
+    <center><h4 class="font-semibold text-m text-gray-500 leading-tight" style="margin: 5em;">
+        No Rooms available for this hotel.   <a href='/fhotel'>Find hotels?</a>
+     </h4></center>
+        @else
 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" >
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
    {{$name1[0]}}
     </h2><br>
     <br>
 
-    @if (count($errors) > 0)
-<div class="alert alert-danger">
-    <strong>Whoops!</strong> File type not accepted.<br><br>
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
-            @csrf
 
 
             <div>
@@ -82,10 +91,13 @@
 
 
             <div class="flex items-center justify-end mt-4">
-            <x-jet-button class="ml-4">
+            <a href="book?id={{$ids}}&hid={{$hid[0]}}&st=0&et=0&pr=0"><x-jet-button class="ml-4">
              {{ __('Book') }}
-                    </x-jet-button>
+                    </x-jet-button></a>
             </div>
 
     </div></div>
+
+
+@endif
 @endsection

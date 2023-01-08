@@ -16,10 +16,10 @@ class Transactions extends Model
      'promoid',
      'amount',
      'numberofdays',
-     'totalrcv',
-     'change',
-     'banamount',
-     'stat',
+     'ban_amount',
+     'start_date',
+     'end_date',
+     'status',
      'referenceid',
     ];
 

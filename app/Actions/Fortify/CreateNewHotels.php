@@ -25,11 +25,12 @@ class CreatesNewHotel implements CreatesNewHotels
             'location' => ['required', 'string', 'max:255'],
         ])->validate();
 
-    
+
             return Hotels::create([
                 'hotelname' => $data['name'],
             'location' => $data['loc'],
             'rating' => "5",
+            'stat' => '0',
             ]);
 
     }

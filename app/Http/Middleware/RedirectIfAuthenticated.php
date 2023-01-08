@@ -26,17 +26,8 @@ class RedirectIfAuthenticated
 
                 $user = Auth::user();
 
-if(strcmp($user->type, "hotel")){
-    return redirect()->intended('htledash');
-}
 
-if(strcmp($user->type, "user")){
-    return redirect()->intended('dashboard');
-}
-
-else {
     return redirect(RouteServiceProvider::HOME);
-}
 
 
             }

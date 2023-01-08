@@ -6,7 +6,107 @@
         </h2>
     </x-slot>
 
+    <div class="py-12">
 
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="width: auto; padding-bottom: 5em;">
+                    <center><h2 class="font-semibold text-xl text-gray-800 leading-tight" style="margin: 5em;">
+                        {{ __('My Reservations') }}
+                    </h2></center>
+                    <script src="//unpkg.com/alpinejs" defer></script>
+
+
+                          <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8" >
+                            <div class="overflow-x" style="width: 100%; overflow-y:scroll; overflow-x:scroll;">
+                              <table class="min-w-full" style="width: 180%;">
+                                <thead class="border-b">
+                                  <tr>
+
+                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        Reference ID
+                                    </th>
+                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        Status
+                                    </th>
+
+
+                                        <input type="text" hidden>
+
+                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                      Print Receipt
+                                    </th>
+
+
+                                    <input type="text" hidden>
+
+
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    @for($i=0; $i<$transcounter; $i++)
+                                  <tr class="border-b">
+
+                                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                      {{$referid[$i]}}
+                                    </td>
+                                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                     @if($status[$i]==0)
+                                     <span
+                                     class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                     <span aria-hidden
+                                         class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
+                                 <span class="relative">Pending</span>
+                                 </span>
+
+                                 @elseif($status[$i]==1)
+                                 <span
+                                 class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                 <span aria-hidden
+                                     class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
+                             <span class="relative" style="color:green;">Reserved</span>
+                             </span>
+
+                            <a href="canc?id={{$referid[$i]}}">
+                             <span
+                             class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                             <span aria-hidden
+                                 class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
+                         <span class="relative" style="color:red;">Cancel</span>
+                         </span>
+                            </a>
+
+                             <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+
+                                  <a href="printr?id={{$transid[$i]}}"><x-jet-button class="ml-4">
+                                    {{ __('Print') }}
+                                           </x-jet-button></a>
+
+                              </td>
+
+                              @else
+                              <span
+                              class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                              <span aria-hidden
+                                  class="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
+                          <span class="relative" style="color:red;;">Cancelled</span>
+                          </span>
+                                     @endif
+                                    </td>
+
+
+                                  </tr>
+                                  @endfor
+
+
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+</div>
+        </div>
 
 
     <div class="py-12">

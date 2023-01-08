@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id('transid');
             $table->foreignId('userid');
             $table->foreignId('roomid');
@@ -34,7 +34,30 @@ return new class extends Migration
             $table->float('ban_amount');
             $table->string('referenceId');
             $table->integer('numberofDays');
+            $table->datetime('start_date');
+            $table->datetime('end_date');
             $table->string('status')->default("0");
+            $table->timestamps();
+        });
+
+        Schema::create('rtemps', function (Blueprint $table) {
+            $table->id('id');
+            $table->foreignId('userid');
+            $table->foreignId('roomid');
+            $table->foreignId('promoid');
+            $table->foreignId('hotelid');
+            $table->float('amount');
+            $table->string('referenceId');
+            $table->string('status')->default("0");
+            $table->timestamps();
+        });
+
+        Schema::create('paymentopts', function (Blueprint $table) {
+            $table->id('id');
+            $table->String('hotelid');
+            $table->String('qr');
+            $table->String('altdets');
+            $table->int('stat');
             $table->timestamps();
         });
     }
