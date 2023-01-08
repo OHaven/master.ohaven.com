@@ -84,6 +84,7 @@ Route::middleware([
     Route::any('settle', [admin::class, 'settle'])->name('settle');
     Route::any('settlepay', [admin::class, 'setssle'])->name('settlepay');
     Route::any('canc', [transact::class, 'canc'])->name('canc');
+    Route::any('cancels', [transact::class, 'cancel'])->name('cancels');
 
 
 

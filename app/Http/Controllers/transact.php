@@ -260,7 +260,14 @@ class transact extends Controller
 
     public function canc(Request $rq){
         $refid = $rq->id;
-        return view('cancels', compact('refid'));
+        return view('cancel', compact('refid'));
+    }
+
+    public function cancel(Request $rq) {
+        $ref = $rq->id;
+        Transactions::where('referenceId', '=', $ref)->update([
+            'status' => 2,
+        ]);
     }
 }
 

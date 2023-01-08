@@ -35,16 +35,7 @@ return new class extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable('users')) {
-            Schema::table('users', function (Blueprint $table) {
-                // $table->integer('votes');
-            });
-        }
-
-        if (Schema::hasTable('hotels')) {
-            Schema::table('hotels', function (Blueprint $table) {
-                // $table->integer('votes');
-            });
-        }
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('hotels');
     }
 };

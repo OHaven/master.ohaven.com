@@ -69,6 +69,9 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('promos');
+        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('rtemps');
+        Schema::dropIfExists('paymentopts');
     }
 };
