@@ -1,18 +1,27 @@
 <IfModule mod_rewrite.c>
-    RewriteBase /public
     <IfModule mod_negotiation.c>
-        Options +FollowSymlinks -MultiViews
+        Options -MultiViews -Indexes
     </IfModule>
+
+    <Directory "/home/forge/ohaven.online/public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
     RewriteEngine On
 
-    #1and1 to enable PHP 5.4
-    AddHandler x-mapp-php6 .php 
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirect Trailing Slashes...
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
 
-    # Handle Front Controller...
+    # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
