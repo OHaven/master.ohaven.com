@@ -21,7 +21,7 @@ class GetLocation extends Controller
         $ip = request()->header('X-Forwarded-For');
         if ($position = Location::get($ip)) {
             $user = Auth::user();
-
+            die('Working');
             if(strcmp(Auth::user()->type, "admin")==true && strcmp(Auth::user()->type, "user")==true && strcmp(Auth::user()->type, "hotel")==false){
                 $name = User::where('id', '=', Auth::user()->id)->pluck('name')->take(1);
                 $stat = Hotels::where('hotelname', '=', $name[0])->pluck('stat');
