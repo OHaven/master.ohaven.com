@@ -3,7 +3,7 @@
         Options -MultiViews -Indexes
     </IfModule>
 
-    <Directory "/home/forge/ohaven.online/public">
+    <Directory "/ohaven.online/public">
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
