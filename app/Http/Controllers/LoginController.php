@@ -37,7 +37,7 @@ class LoginController extends Controller
 
                 Auth::login($finduser);
 
-                return redirect()->intended('dashboard');
+                return redirect()->intended('ohaven.online/dashboard');
 
             }else{
                 $newUser = User::updateOrCreate(['email' => $user->email],[
@@ -49,7 +49,7 @@ class LoginController extends Controller
 
                 Auth::login($newUser);
 
-                return redirect()->intended('dashboard');
+                return redirect()->intended('ohaven.online/dashboard');
             }
 
         } catch (Exception $e) {
