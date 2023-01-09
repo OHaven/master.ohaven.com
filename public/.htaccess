@@ -1,20 +1,13 @@
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
+# php -- BEGIN cPanel-generated handler, do not edit
+<IfModule mime_module>
 
-    <Directory "/home/forge/ohaven.online/public">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-    
-AddHandler application/x-httpd-php70 .php
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
-</IfModule>
+#PHP version
 
+  AddType application/x-httpd-ea-php71 .php .php7 .phtml
+
+# php -- END cPanel-generated handler, do not edit
+
+RewriteEngine On
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -25,8 +18,9 @@ AddHandler application/x-httpd-php70 .php
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
 </IfModule>
