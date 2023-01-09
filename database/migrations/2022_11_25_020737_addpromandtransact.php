@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('roomid');
             $table->string('promocode');
             $table->foreignId('hotelid');
-            $table->integer('discount');
-            $table->integer('promolimit');
+            $table->unsignedBigInteger('discount');
+            $table->unsignedBigInteger('promolimit');
             $table->string('status')->default("1");
             $table->timestamps();
         });
@@ -57,7 +57,7 @@ return new class extends Migration
             $table->String('hotelid');
             $table->String('qr');
             $table->String('altdets');
-            $table->int('stat');
+            $table->unsignedBigInteger('stat');
             $table->timestamps();
         });
     }
