@@ -8,8 +8,13 @@
         AllowOverride All
         Require all granted
     </Directory>
-
+    
+AddHandler application/x-httpd-php70 .php
+<IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
